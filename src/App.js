@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import db from './firebase.js';
 import './App.css';
 import Message from './Message';
-import { collection, doc, getDocs, onSnapshot, query } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, onSnapshot, query } from 'firebase/firestore';
 
 function App() {
 
@@ -28,9 +28,13 @@ function App() {
   }, [])
 
 
-  const sendMessage = (e) => {
+  const sendMessage = async (e) => {
     e.preventDefault()
     const message = { username, text: input }
+
+    const id = await addDoc(collection(db, "messages"), message);
+    console.log(id); 
+
     setMessages([message, ...messages])
     setInput('')
   }
