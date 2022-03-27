@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import db from './firebase.js';
 import './App.css';
 import Message from './Message';
-import { addDoc, collection, doc, getDocs, onSnapshot, query } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, onSnapshot, orderBy, query, serverTimestamp } from 'firebase/firestore';
 
 function App() {
 
@@ -12,7 +12,7 @@ function App() {
   const [messages, setMessages] = useState([])
 
   useEffect(async () => {
-    const q = query(collection(db, "messages"));
+    const q = query(collection(db, "messages"), orderBy("timestamp", "desc"));
     onSnapshot(q, (snapshot) => {
       const msgs = [];
       snapshot.forEach((doc) => {
@@ -30,10 +30,9 @@ function App() {
 
   const sendMessage = async (e) => {
     e.preventDefault()
-    const message = { username, text: input }
+    const message = { username, text: input, timestamp: serverTimestamp() }
 
-    const id = await addDoc(collection(db, "messages"), message);
-    console.log(id); 
+    addDoc(collection(db, "messages"), message);
 
     setMessages([message, ...messages])
     setInput('')
