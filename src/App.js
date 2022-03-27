@@ -34,7 +34,6 @@ function App() {
 
     addDoc(collection(db, "messages"), message);
 
-    setMessages([message, ...messages])
     setInput('')
   }
 
@@ -42,6 +41,7 @@ function App() {
     <div className="App">
       <h2>Messenger</h2>
       <form>
+        
         <FormControl>
           <InputLabel htmlFor='message'>Enter message</InputLabel>
           <Input value={input} onChange={e => setInput(e.target.value)} />
